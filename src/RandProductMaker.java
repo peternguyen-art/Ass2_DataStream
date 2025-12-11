@@ -31,7 +31,7 @@ public class RandProductMaker extends JFrame {
     JButton quitBtn;
 
     RandomAccessFile raf;
-    final String FILE_NAME = "product.dat";
+    final String FILE_NAME = System.getProperty("user.dir") + "\\src\\product.dat";
     long recordCount = 0;
 
     public RandProductMaker() {
