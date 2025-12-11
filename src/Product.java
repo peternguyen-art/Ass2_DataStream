@@ -1,6 +1,15 @@
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Objects;
+import java.io.Serializable;
 
-public class Product {
+public class Product implements Serializable {
+    public static final int NAME_LENGTH = 35;
+    public static final int DESCRIPTION_LENGTH = 75;
+    public static final int ID_LENGTH = 6;
+
+    public static final int RECORD_SIZE = (NAME_LENGTH*2)+(DESCRIPTION_LENGTH*2)+(ID_LENGTH*2)+8;
+
     private String name;
     private String description;
     private String ID;
@@ -98,5 +107,24 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(name, description, ID, cost);
+    }
+
+    private static String padString(String s, int length){
+        if(s.length()>length){
+            return s.substring(0, length);
+        }else{
+            StringBuilder sb = new StringBuilder(s);
+            while (sb.length()<length){
+                sb.append(' ');
+            }
+            return sb.toString();
+        }
+    }
+
+    public void writeToFile(RandomAccessFile raf) throws IOException {
+        raf.writeChars(padString(name, NAME_LENGTH));
+        raf.writeChars(padString(description, DESCRIPTION_LENGTH));
+        raf.writeChars(padString(ID, ID_LENGTH));
+        raf.writeDouble(cost);
     }
 }
